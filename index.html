@@ -2,56 +2,67 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
     <title></title>
-    <script
-	src="https://code.jquery.com/jquery-3.3.1.min.js"
- 	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  	crossorigin="anonymous"></script>
-  	<style type="text/css">
-  		#desForm{
-  			display: none;
-  		}
-  	</style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 
-<body>
-    <form id="desForm" action="map.php" method="get">
-        目的地
-        <input id="ori" type="hidden" name="ori">
-        <input type="text" name="des">
-        <input type="submit">
+<body class="text-center">
+    <form class="form-signin" action="myRoute.php" action="get">
+        <input id="account" type="hidden" name="account">
+        <h1 class="h3 mb-3 font-weight-normal">地圖名稱</h1>
+        <input type="text" class="form-control" name="map" required="required">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">建立</button>
     </form>
- 
-	<script>
-	    function getLocation() {//取得 經緯度
-	        if (navigator.geolocation) {//
-	            navigator.geolocation.getCurrentPosition(showPosition);//有拿到位置就呼叫 showPosition 函式
-	        } else { 
-	            m.innerHTML = "您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址";
-	        }
-	    }
-	 	$(document).ready(function() {
-	 		getLocation();
-	 	});
-	    function showPosition(position) {
-	    	$.ajax({
-				url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false&language=zh-tw',
-				type: 'GET',
-				dataType: 'json',
-			})
-			.done(function(data) {
-				$("#ori").val(data.results[0].formatted_address);
-				$("#desForm").show();
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
-	    }
-	</script>
+    <script type="text/javascript">
+    let account = "account";
+    if (!getCookie(account)) {
+        $.ajax({
+                url: './handler.php',
+                type: 'POST',
+                dataType: 'json',
+                data: { act: 'rand' },
+                async: false
+            })
+            .done(function(data) {
+                setCookie(account, data, 1);
+                $("#account").val(data);
+    			console.log(123,getCookie(account));
+            })
+            .fail(function() {
+    			console.log("error");
+    		})
+    }else{
+    	account = getCookie(account);
+    	console.log(123,account);
+        setCookie(account, account, 1);
+        $("#account").val(account);
+    }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=")
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setTime(exdate.getTime() + 10 * 1000);
+        // exdate.setDate(exdate.getDate() + expiredays);
+        document.cookie = c_name + "=" + escape(value) +
+            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+    }
+
+    </script>
 </body>
 
 </html>
