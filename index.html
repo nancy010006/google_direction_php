@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title></title>
+    <script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+ 	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  	crossorigin="anonymous"></script>
+  	<style type="text/css">
+  		#desForm{
+  			display: none;
+  		}
+  	</style>
+</head>
+
+<body>
+    <form id="desForm" action="map.php" method="get">
+        目的地
+        <input id="ori" type="hidden" name="ori">
+        <input type="text" name="des">
+        <input type="submit">
+    </form>
+ 
+	<script>
+	    function getLocation() {//取得 經緯度
+	        if (navigator.geolocation) {//
+	            navigator.geolocation.getCurrentPosition(showPosition);//有拿到位置就呼叫 showPosition 函式
+	        } else { 
+	            m.innerHTML = "您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址";
+	        }
+	    }
+	 	$(document).ready(function() {
+	 		getLocation();
+	 	});
+	    function showPosition(position) {
+	    	$.ajax({
+				url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false&language=zh-tw',
+				type: 'GET',
+				dataType: 'json',
+			})
+			.done(function(data) {
+				$("#ori").val(data.results[0].formatted_address);
+				$("#desForm").show();
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+	    }
+	</script>
+</body>
+
+</html>
