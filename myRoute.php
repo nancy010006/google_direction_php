@@ -131,6 +131,7 @@
     			})
     			.fail(function() {
     				console.log("error");
+                    history.go(0);
     			})
     			.always(function() {
     				console.log("complete");
