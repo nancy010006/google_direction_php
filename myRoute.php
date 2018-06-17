@@ -73,6 +73,7 @@
     </form>
     <script type="text/javascript">
         let ori;
+        let nowPosition;
 		const account = '<?php echo $_GET["account"]?>';
 		const map = '<?php echo $_GET["map"]?>';
 
@@ -88,32 +89,15 @@
 
     	function getLocation() {//取得 經緯度
 	        if (navigator.geolocation) {//
-	            navigator.geolocation.getCurrentPosition(showPosition);//有拿到位置就呼叫 showPosition 函式
+	            navigator.geolocation.getCurrentPosition(setPosition);//有拿到位置就呼叫 setPosition 函式
 	        } else { 
 	            console.log("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
             }
 	    }
 	    
-	    function showPosition(position) {
-	    	$.ajax({
-				url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false&language=zh-tw',
-				type: 'GET',
-				dataType: 'json'
-			})
-			.done(function(data){
-                console.log(data);
-                if(data){
-                    ori = data.results[0].formatted_address;
-                    generateView();
-                }
-                else{
-                    alert('發生異常 請重新載入');
-                    history.go(0);
-                }
-			})
-			.always(function() {
-				// console.log("complete");
-			});
+	    function setPosition(position) {
+            nowPosition = position.coords.latitude+','+position.coords.longitude;
+            generateView();
 	    }
 
 	    function setForm(){
@@ -160,7 +144,7 @@
                         const input = '<input type="hidden" name="des" value="'+val.address+'">'
                         const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-trash-alt"></i></button>';
                         const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle btn-sm"><i class="fas fa-pencil-alt"></i></button> ';
-                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h2>'+val.address+'</h2><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr='+ori+'&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
+                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h2>'+val.address+'</h2><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr='+nowPosition+'&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
                         $("#ul").append(li);
 	    			});
     			}
