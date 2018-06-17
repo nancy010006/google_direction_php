@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>等下去哪</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -14,7 +15,7 @@
     <form class="form-signin" action="myRoute.php" action="get">
         <input id="account" type="hidden" name="account">
         <h1 class="font-weight-normal">等下去哪</h1>
-        <h2 class="font-weight-normal">輸入自己定義的路線圖名稱，即可開始建立自己的路線圖，地圖在三天內未使用會自動刪除。</h2>
+        <h2 class="font-weight-normal">輸入自定義路線圖名稱，即可開始建立自己的路線圖。</h2>
         <input type="text" class="form-control" name="map" required="required" list="maps">
 		<datalist id="maps">
 		  <option value="自訂地圖1">
@@ -37,7 +38,7 @@
                 async: false
             })
             .done(function(cookie) {
-                setCookie(account, cookie, 1);
+                setCookie(account, cookie, 3);
                 $("#account").val(cookie);
     			console.log(123,getCookie(account));
             })
@@ -47,7 +48,7 @@
     }else{
     	cookie = getCookie(account);
     	console.log(123,cookie);
-        setCookie(account, cookie, 1);
+        setCookie(account, cookie, 3);
         $("#account").val(cookie);
     }
 
@@ -67,8 +68,8 @@
     function setCookie(c_name, value, expiredays) {
     	console.log(c_name,value);
         var exdate = new Date()
-        exdate.setTime(exdate.getTime() + 20 * 1000);
-        // exdate.setDate(exdate.getDate() + expiredays);
+        // exdate.setTime(exdate.getTime() + 20 * 1000);
+        exdate.setDate(exdate.getDate() + expiredays);
         document.cookie = c_name + "=" + escape(value) +
             ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
     }

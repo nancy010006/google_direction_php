@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>等下去哪-路線圖</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -53,14 +54,14 @@
         <!-- <input type="text" name="des"> -->
         <div class="col-md-12 order-md-2 mb-12">
             <h1 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-lg"><i class="fas fa-plus"></i></button></span>
+            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button></span>
             <!-- <span class="badge badge-secondary badge-pill">3</span> -->
             </h1>
             <ul id="ul" class="list-group mb-3">
                 <li id="example" class="list-group-item d-flex justify-content-between lh-condensed" style="display: none !important">
                     <div>
                         <h2>範例路線-崎下</h2>
-                        <a class="btn btn-lg btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
+                        <a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
                     </div>
                     <!-- <span class="text-muted">$12</span> -->
                 </li>
@@ -156,9 +157,9 @@
     			}else{
     				$.each(data, function(index, val) {
                         const input = '<input type="hidden" name="des" value="'+val.address+'">'
-                        const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-lg"><i class="fas fa-trash-alt"></i></button>';
-                        const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle btn-lg"><i class="fas fa-pencil-alt"></i></button> ';
-                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h2>'+val.address+'</h2><a class="btn btn-lg btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr='+ori+'&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
+                        const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                        const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle btn-sm"><i class="fas fa-pencil-alt"></i></button> ';
+                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h2>'+val.address+'</h2><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr='+ori+'&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
                         $("#ul").append(li);
 	    			});
     			}
@@ -175,7 +176,7 @@
             $("#submit").show();
             console.log(self);
             const newRoute = '<input type="text" class="form-control" name="des" value="" required="required">';
-            const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-lg"><i class="fas fa-trash-alt"></i></button>';
+            const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-trash-alt"></i></button>';
             let li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">'+newRoute+'</h6></div><span class="text-muted">'+deleteButton+'</span></li>'
 
             $("#ul").append(li);
@@ -219,8 +220,8 @@
 
         function setCookie(c_name, value, expiredays) {
             var exdate = new Date()
-            exdate.setTime(exdate.getTime() + 20 * 1000);
-            // exdate.setDate(exdate.getDate() + expiredays);
+            // exdate.setTime(exdate.getTime() + 20 * 1000);
+            exdate.setDate(exdate.getDate() + expiredays);
             document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
         }
 
@@ -229,8 +230,8 @@
             let account = "account";
             cookie = getCookie(account);
             // console.log(123,cookie);
-            setCookie(account, cookie, 1);
-            setTimeout(function(){ keepCookie(account, cookie, 1); }, 60000);
+            setCookie(account, cookie, 3);
+            setTimeout(function(){ keepCookie(); }, 60000);
         }
 
         function loadingEffect() {
