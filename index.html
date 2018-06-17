@@ -12,13 +12,22 @@
 <body class="text-center">
     <form class="form-signin" action="myRoute.php" action="get">
         <input id="account" type="hidden" name="account">
-        <h1 class="h3 mb-3 font-weight-normal">地圖名稱</h1>
-        <input type="text" class="form-control" name="map" required="required">
+        <h1 class="font-weight-normal">路線圖名稱</h1>
+        <h2 class="font-weight-normal">輸入自己定義的路線圖名稱，即可開始建立自己的路線圖</h2>
+        <input type="text" class="form-control" name="map" required="required" list="maps">
+		<datalist id="maps">
+		  <option value="自訂地圖1">
+		  <option value="自訂地圖2">
+		  <option value="自訂地圖3">
+		  <option value="自訂地圖4">
+		  <option value="自訂地圖5">
+		</datalist>
         <button class="btn btn-lg btn-primary btn-block" type="submit">建立</button>
     </form>
     <script type="text/javascript">
     let account = "account";
     if (!getCookie(account)) {
+    	console.log("cookie不見了");
         $.ajax({
                 url: './handler.php',
                 type: 'POST',
@@ -56,7 +65,7 @@
 
     function setCookie(c_name, value, expiredays) {
         var exdate = new Date()
-        exdate.setTime(exdate.getTime() + 10 * 1000);
+        exdate.setTime(exdate.getTime() + 20 * 1000);
         // exdate.setDate(exdate.getDate() + expiredays);
         document.cookie = c_name + "=" + escape(value) +
             ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());

@@ -6,31 +6,49 @@
     <title></title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
 
 <body>
-    <form id="desForm">
-	    <ul id="ul" class="list-group mb-3">
-	    	<!-- 原始碼 -->
-		    <!-- <li class="list-group-item d-flex justify-content-between lh-condensed">
-	      		<div>
-	        		<h6 class="my-0">Product name</h6>
-					<a class="btn btn-sm btn-primary" href="../../components/navbar/" role="button">開始導航 »</a>
-	      		</div>
-		    </li> -->
-	  	</ul>
-	  	<input type="submit">
+    <br>
+    <form id="desForm" class="container">
+        <!-- <input type="text" name="des"> -->
+        <div class="col-md-12 order-md-2 mb-12">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle"><i class="fas fa-plus"></i></button></span>
+            <!-- <span class="badge badge-secondary badge-pill">3</span> -->
+            </h4>
+            <ul id="ul" class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div id="example">
+                        <h6>範例路線-崎下</h6>
+                        <a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
+                    </div>
+                    <!-- <span class="text-muted">$12</span> -->
+                </li>
+            </ul>
+            <input id="submit" type="submit" class="btn btn-success form-control" value="確認路線">
+            <!-- <button class="btn btn-info form-control">取消所有變更</button> -->
+        </div>
+
     </form>
     <script type="text/javascript">
    		let latitude;
 		let longitude;
 		const account = '<?php echo $_GET["account"]?>';
 		const map = '<?php echo $_GET["map"]?>';
+
     	$(document).ready(function() {
     		setForm();
     		getLocation();
     		generateView();
+            let account = "account";
+            account = getCookie(account);
+            console.log(123,account);
+            setCookie(account, account, 1);
+            $("#account").val(account);
     	});
+
     	function getLocation() {//取得 經緯度
 	        if (navigator.geolocation) {//
 	            navigator.geolocation.getCurrentPosition(showPosition);//有拿到位置就呼叫 showPosition 函式
@@ -88,8 +106,7 @@
     		.done(function(data) {
     			// console.log(data);
     			if(data=="no"){
-	    			let input = '<input type="text" name="des" value="" required="required">';
-    				$("#desForm").append(input);
+                    $("#submit").hide();
     			}else if(data=="error"){
     				alert("對應編號有誤");
     				history.go(-1);
@@ -104,8 +121,11 @@
     				*/
     				$.each(data, function(index, val) {
 	    				// let a = '<a href="./map.php?des='+val.address+'">導航</a>';
-	    				let li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">'+val.address+'</h6><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div></li>'
-	    				$("#ul").append(li);
+                        const input = '<input type="hidden" name="des" value="'+val.address+'">'
+                        const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle"><i class="fas fa-trash-alt"></i></button>';
+                        const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle"><i class="fas fa-pencil-alt"></i></button> ';
+                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6>'+val.address+'</h6><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
+                        $("#ul").append(li);
 	    			});
     			}
     		})
@@ -116,6 +136,56 @@
     			// console.log("complete");
     		});
 	    }
+
+        function addRoute(self){
+            $("#submit").show();
+            console.log(self);
+            const newRoute = '<input type="text" class="form-control" name="des" required="required">';
+            const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle"><i class="fas fa-trash-alt"></i></button>';
+            let li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">'+newRoute+'</h6></div><span class="text-muted">'+deleteButton+'</span></li>'
+
+            $("#ul").append(li);
+
+            // $(self).before(newRoute+deleteButton);
+        }
+
+        function delRoute(self){
+            const li = $(self).closest('li');
+            li.remove();
+            let liLength = $('li').length;
+            if(liLength<1){
+                $("#submit").hide();
+                $("#example").show();
+            }
+        }
+
+        function editRoute(self){
+            const h6 = $(self).parent().siblings('div').children('h6');
+            const hidden = $(self).siblings('input');
+            h6.html('<input class="form-control" name="des" type="text" value="'+h6.text()+'">');
+            hidden.remove();
+        }
+
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=")
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        function setCookie(c_name, value, expiredays) {
+            var exdate = new Date()
+            exdate.setTime(exdate.getTime() + 20 * 1000);
+            // exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) +
+                ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+        }
     </script>
 </body>
 
