@@ -65,13 +65,14 @@
         <!-- <input type="text" name="des"> -->
         <div class="col-md-12 order-md-2 mb-12">
             <h1 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button></span>
+            <span class="text-muted"><?php echo $_GET["map"]?> <button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button></span>
             <!-- <span class="badge badge-secondary badge-pill">3</span> -->
             </h1>
             <ul id="ul" class="list-group mb-3">
                 <li id="example" class="list-group-item d-flex justify-content-between lh-condensed" style="display: none !important">
                     <div>
                         <h2>範例路線-暨大~崎下</h2>
+                        <h6>點擊上方+號開始新增路線</h6>
                         <h6>除範例路線外，其他路線一率從現在地點出發</h6>
                         <a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=暨南大學&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
                     </div>
