@@ -29,7 +29,7 @@
     <script type="text/javascript">
     let account = "account";
     if (!getCookie(account)) {
-    	console.log("cookie不見了");
+    	// console.log("cookie不見了");
         $.ajax({
                 url: './handler.php',
                 type: 'POST',
@@ -40,14 +40,14 @@
             .done(function(cookie) {
                 setCookie(account, cookie, 3);
                 $("#account").val(cookie);
-    			console.log(123,getCookie(account));
+    			// console.log(123,getCookie(account));
             })
             .fail(function() {
-    			console.log("error");
+    			// console.log("error");
     		})
     }else{
     	cookie = getCookie(account);
-    	console.log(123,cookie);
+    	// console.log(123,cookie);
         setCookie(account, cookie, 3);
         $("#account").val(cookie);
     }
@@ -66,7 +66,7 @@
     }
 
     function setCookie(c_name, value, expiredays) {
-    	console.log(c_name,value);
+    	// console.log(c_name,value);
         var exdate = new Date()
         // exdate.setTime(exdate.getTime() + 20 * 1000);
         exdate.setDate(exdate.getDate() + expiredays);
