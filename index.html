@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>等下去哪</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -35,19 +36,19 @@
                 data: { act: 'rand' },
                 async: false
             })
-            .done(function(data) {
-                setCookie(account, data, 1);
-                $("#account").val(data);
+            .done(function(cookie) {
+                setCookie(account, cookie, 1);
+                $("#account").val(cookie);
     			console.log(123,getCookie(account));
             })
             .fail(function() {
     			console.log("error");
     		})
     }else{
-    	account = getCookie(account);
-    	console.log(123,account);
-        setCookie(account, account, 1);
-        $("#account").val(account);
+    	cookie = getCookie(account);
+    	console.log(123,cookie);
+        setCookie(account, cookie, 1);
+        $("#account").val(cookie);
     }
 
     function getCookie(c_name) {
@@ -64,6 +65,7 @@
     }
 
     function setCookie(c_name, value, expiredays) {
+    	console.log(c_name,value);
         var exdate = new Date()
         exdate.setTime(exdate.getTime() + 20 * 1000);
         // exdate.setDate(exdate.getDate() + expiredays);

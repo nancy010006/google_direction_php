@@ -3,10 +3,41 @@
 
 <head>
 	<meta charset="utf-8">
-    <title></title>
+    <title>等下去哪-路線圖</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <style type="text/css">
+        .spinner {
+          width: 40px;
+          height: 40px;
+          background-color: #333;
+
+          margin: 100px auto;
+          -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+          animation: sk-rotateplane 1.2s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes sk-rotateplane {
+          0% { -webkit-transform: perspective(120px) }
+          50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+          100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+        }
+
+        @keyframes sk-rotateplane {
+          0% { 
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+          } 50% { 
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+          } 100% { 
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+          }
+        }
+    </style>
 </head>
 
 <body>
@@ -27,10 +58,10 @@
                     <!-- <span class="text-muted">$12</span> -->
                 </li>
             </ul>
-            <input id="submit" type="submit" class="btn btn-success form-control" value="確認路線">
+            <div class="spinner"></div>
+            <input id="submit" type="submit" class="btn btn-success form-control" value="儲存變更">
             <!-- <button class="btn btn-info form-control">取消所有變更</button> -->
         </div>
-
     </form>
     <script type="text/javascript">
    		let latitude;
@@ -39,14 +70,13 @@
 		const map = '<?php echo $_GET["map"]?>';
 
     	$(document).ready(function() {
+
+            loadingEffect();
+            getLocation();
     		setForm();
-    		getLocation();
-    		generateView();
-            let account = "account";
-            account = getCookie(account);
-            console.log(123,account);
-            setCookie(account, account, 1);
-            $("#account").val(account);
+            keepCookie();
+    		// generateView();
+
     	});
 
     	function getLocation() {//取得 經緯度
@@ -54,7 +84,7 @@
 	            navigator.geolocation.getCurrentPosition(showPosition);//有拿到位置就呼叫 showPosition 函式
 	        } else { 
 	            console.log("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
-	        }
+            }
 	    }
 	    
 	    function showPosition(position) {
@@ -67,6 +97,7 @@
 			.done(function(){
 				latitude = position.coords.latitude;
 				longitude = position.coords.longitude;
+                generateView();
 			})
 			.always(function() {
 				console.log("complete");
@@ -160,6 +191,7 @@
         }
 
         function editRoute(self){
+            $('#submit').show();
             const h6 = $(self).parent().siblings('div').children('h6');
             const hidden = $(self).siblings('input');
             h6.html('<input class="form-control" name="des" type="text" value="'+h6.text()+'">');
@@ -183,9 +215,27 @@
             var exdate = new Date()
             exdate.setTime(exdate.getTime() + 20 * 1000);
             // exdate.setDate(exdate.getDate() + expiredays);
-            document.cookie = c_name + "=" + escape(value) +
-                ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+            document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
         }
+
+        //保持cookie狀態
+        function keepCookie(){
+            let account = "account";
+            cookie = getCookie(account);
+            console.log(123,cookie);
+            setCookie(account, cookie, 1);
+            setTimeout(function(){ keepCookie(account, cookie, 1); }, 1000);
+        }
+
+        function loadingEffect() {
+            const loading = $('.spinner');
+            $('#submit').hide();
+            $(document).ajaxStart(function () {
+            }).ajaxStop(function () {
+                loading.hide();
+            });
+        }
+
     </script>
 </body>
 
