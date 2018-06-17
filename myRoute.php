@@ -97,8 +97,7 @@
 	    	$.ajax({
 				url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false&language=zh-tw',
 				type: 'GET',
-				dataType: 'json',
-				async:false
+				dataType: 'json'
 			})
 			.done(function(data){
                 console.log(data);
@@ -175,12 +174,12 @@
         function addRoute(self){
             $("#submit").show();
             console.log(self);
-            const newRoute = '<input type="text" class="form-control" name="des" required="required">';
+            const newRoute = '<input type="text" class="form-control" name="des" value="" required="required">';
             const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-lg"><i class="fas fa-trash-alt"></i></button>';
             let li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">'+newRoute+'</h6></div><span class="text-muted">'+deleteButton+'</span></li>'
 
             $("#ul").append(li);
-
+            $('input[value=""]').focus();
             // $(self).before(newRoute+deleteButton);
         }
 
