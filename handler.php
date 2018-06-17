@@ -6,21 +6,22 @@
     global $conn;
 	switch ($_POST["act"]) {
 		case 'put':
-			$test =array();
+			$result =array();
 			$account = mysqli_real_escape_string($conn,$_POST['account']);
 			$map = mysqli_real_escape_string($conn,$_POST['map']);
-    		$sql = "delete from user where account = '$account'";
+    		$sql = "INSERT INTO user (account) VALUES ('$account') ON DUPLICATE KEY UPDATE account = '$account';";
     		mysqli_query($conn,$sql);
-    		$sql = "insert into user (account) values ('$account')";
-			array_push($test, $sql);	
+    		$sql = "delete from map where uid = '$account' and map = '$map'";
+    		echo $sql;
     		mysqli_query($conn,$sql);
+			array_push($result, $sql);	
     		foreach ($_POST["data"] as $key => $value) {
 				$des = mysqli_real_escape_string($conn,$value["value"]);
     			$sql = "insert into map (uid,address,map) values ('$account','$des','$map')";
-    			array_push($test, $sql);	
+    			array_push($result, $sql);	
     			mysqli_query($conn,$sql);
     		}
-    		echo json_encode($test);
+    		echo json_encode($result);
 			break;
 		case 'get':
 			$account = mysqli_real_escape_string($conn,$_POST['account']);
