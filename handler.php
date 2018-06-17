@@ -48,7 +48,7 @@
    //  		}
 			break;
 		case 'rand':
-			$rand = md5(rand(-16777216,16777216));
+			$rand = md5(rand(-2147483648,2147483647));
 			$sql = "select account from user where account = '$rand'";
     		$result = mysqli_query($conn,$sql);
     		while (mysqli_num_rows($result)>0) {

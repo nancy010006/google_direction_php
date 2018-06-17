@@ -37,6 +37,13 @@
             -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
           }
         }
+
+        .list-group-item{
+            padding: 1.5rem 2rem;
+        }
+        .edit{
+            height: 4rem;
+        }
     </style>
 </head>
 
@@ -45,15 +52,15 @@
     <form id="desForm" class="container">
         <!-- <input type="text" name="des"> -->
         <div class="col-md-12 order-md-2 mb-12">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle"><i class="fas fa-plus"></i></button></span>
+            <h1 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">路線圖<button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-lg"><i class="fas fa-plus"></i></button></span>
             <!-- <span class="badge badge-secondary badge-pill">3</span> -->
-            </h4>
+            </h1>
             <ul id="ul" class="list-group mb-3">
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div id="example">
-                        <h6>範例路線-崎下</h6>
-                        <a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
+                <li id="example" class="list-group-item d-flex justify-content-between lh-condensed" style="display: none !important">
+                    <div>
+                        <h2>範例路線-崎下</h2>
+                        <a class="btn btn-lg btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr=崎下&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a>
                     </div>
                     <!-- <span class="text-muted">$12</span> -->
                 </li>
@@ -64,8 +71,7 @@
         </div>
     </form>
     <script type="text/javascript">
-   		let latitude;
-		let longitude;
+        let ori;
 		const account = '<?php echo $_GET["account"]?>';
 		const map = '<?php echo $_GET["map"]?>';
 
@@ -94,13 +100,19 @@
 				dataType: 'json',
 				async:false
 			})
-			.done(function(){
-				latitude = position.coords.latitude;
-				longitude = position.coords.longitude;
-                generateView();
+			.done(function(data){
+                console.log(data);
+                if(data){
+                    ori = data.results[0].formatted_address;
+                    generateView();
+                }
+                else{
+                    alert('發生異常 請重新載入');
+                    history.go(0);
+                }
 			})
 			.always(function() {
-				console.log("complete");
+				// console.log("complete");
 			});
 	    }
 
@@ -138,24 +150,16 @@
     			// console.log(data);
     			if(data=="no"){
                     $("#submit").hide();
+                    $("#example").show();
     			}else if(data=="error"){
     				alert("對應編號有誤");
     				history.go(-1);
     			}else{
-    				/*
-					<li class="list-group-item d-flex justify-content-between lh-condensed">
-			      		<div>
-			        		<h6 class="my-0">Product name</h6>
-							<a class="btn btn-sm btn-primary" href="../../components/navbar/" role="button">開始導航 »</a>
-			      		</div>
-				    </li>
-    				*/
     				$.each(data, function(index, val) {
-	    				// let a = '<a href="./map.php?des='+val.address+'">導航</a>';
                         const input = '<input type="hidden" name="des" value="'+val.address+'">'
-                        const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle"><i class="fas fa-trash-alt"></i></button>';
-                        const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle"><i class="fas fa-pencil-alt"></i></button> ';
-                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6>'+val.address+'</h6><a class="btn btn-sm btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?ll='+latitude+','+longitude+'&amp;z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr=407%E5%8F%B0%E4%B8%AD%E5%B8%82%E8%A5%BF%E5%B1%AF%E5%8D%80%E8%BB%8D%E5%92%8C%E8%A1%9790%E8%99%9F&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
+                        const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-lg"><i class="fas fa-trash-alt"></i></button>';
+                        const editButton = '<button onclick="editRoute(this)" type="button" class="btn btn-info btn-circle btn-lg"><i class="fas fa-pencil-alt"></i></button> ';
+                        const li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h2>'+val.address+'</h2><a class="btn btn-lg btn-primary" target="_blank" jstcache="7" href="https://maps.google.com/maps?z=9&amp;t=m&amp;hl=zh-TW&amp;gl=US&amp;mapclient=embed&amp;saddr='+ori+'&amp;daddr='+val.address+'&amp;dirflg=d" jsaction="mouseup:directionsCard.moreOptions" role="button">開始導航 »</a></div><span class="text-muted">'+input+editButton+deleteButton+'</span></li>'
                         $("#ul").append(li);
 	    			});
     			}
@@ -172,7 +176,7 @@
             $("#submit").show();
             console.log(self);
             const newRoute = '<input type="text" class="form-control" name="des" required="required">';
-            const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle"><i class="fas fa-trash-alt"></i></button>';
+            const deleteButton = '<button onclick="delRoute(this)" type="button" class="btn btn-danger btn-circle btn-lg"><i class="fas fa-trash-alt"></i></button>';
             let li = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">'+newRoute+'</h6></div><span class="text-muted">'+deleteButton+'</span></li>'
 
             $("#ul").append(li);
@@ -181,6 +185,7 @@
         }
 
         function delRoute(self){
+            $('#submit').show();
             const li = $(self).closest('li');
             li.remove();
             let liLength = $('li').length;
@@ -192,10 +197,12 @@
 
         function editRoute(self){
             $('#submit').show();
-            const h6 = $(self).parent().siblings('div').children('h6');
+            const h2 = $(self).parent().siblings('div').children('h2');
+            const a = $(self).parent().siblings('div').children('a');
             const hidden = $(self).siblings('input');
-            h6.html('<input class="form-control" name="des" type="text" value="'+h6.text()+'">');
+            h2.html('<input class="form-control edit" name="des" type="text" value="'+h2.text()+'">');
             hidden.remove();
+            a.remove();
         }
 
         function getCookie(c_name) {
@@ -222,9 +229,9 @@
         function keepCookie(){
             let account = "account";
             cookie = getCookie(account);
-            console.log(123,cookie);
+            // console.log(123,cookie);
             setCookie(account, cookie, 1);
-            setTimeout(function(){ keepCookie(account, cookie, 1); }, 1000);
+            setTimeout(function(){ keepCookie(account, cookie, 1); }, 60000);
         }
 
         function loadingEffect() {
