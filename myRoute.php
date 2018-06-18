@@ -1,3 +1,7 @@
+<?php
+    $account = strip_tags(addslashes(trim($_GET['account'])));
+    $map = strip_tags(addslashes(trim($_GET['map'])));
+?>
 <!DOCTYPE html>
 <html>
 
@@ -77,7 +81,7 @@
         <!-- <input type="text" name="des"> -->
         <div class="col-md-12 order-md-2 mb-12">
             <h1 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted"><?php echo $_GET["map"]?> <button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button></span>
+            <span class="text-muted"><?php echo $map?> <button onclick="addRoute(this)" type="button" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button></span>
             <!-- <span class="badge badge-secondary badge-pill">3</span> -->
             </h1>
             <ul id="ul" class="list-group mb-3">
@@ -99,8 +103,8 @@
     <script type="text/javascript">
     let ori;
     let nowPosition;
-    const account = '<?php echo $_GET["account"]?>';
-    const map = '<?php echo $_GET["map"]?>';
+    const account = '<?php echo $account ?>';
+    const map = '<?php echo $map?>';
 
     $(document).ready(function() {
 
