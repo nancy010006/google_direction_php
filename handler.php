@@ -32,6 +32,7 @@
     		if($length){
 				$result = array();
 				while ($data = mysqli_fetch_assoc($query)) {
+					$data["address"] = strip_tags(addslashes(trim($data["address"])));
 					array_push($result, $data);
 				}
 				echo json_encode($result);
